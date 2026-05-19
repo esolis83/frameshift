@@ -41,7 +41,7 @@ function wpToMovie(wp: WPMovie): Movie {
   };
 }
 
-async function fetchWithTimeout(url: string, timeoutMs = 15000): Promise<Response> {
+async function fetchWithTimeout(url: string, timeoutMs = 30000): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   try {

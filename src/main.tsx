@@ -8,6 +8,9 @@ import App from './App.tsx';
 
 const queryClient = new QueryClient();
 
+// Wake up Hostinger shared hosting server on app load
+fetch('https://frameshiftcms.enriquesolis.me/wp-json/wp/v2').catch(() => {});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
