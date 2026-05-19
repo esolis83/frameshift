@@ -41,10 +41,21 @@ function wpToMovie(wp: WPMovie): Movie {
   };
 }
 
+async function fetchWithTimeout(url: string, timeoutMs = 15000): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    return res;
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 export async function fetchMovies(): Promise<Movie[]> {
   if (USE_MOCK) return mockMovies;
 
-  const res = await fetch(`${WP_BASE}/movies?_embed&acf_format=standard&per_page=100`);
+  const res = await fetchWithTimeout(`${WP_BASE}/movies?_embed&acf_format=standard&per_page=100`);
   if (!res.ok) throw new Error(`WP API error: ${res.status}`);
   const data: WPMovie[] = await res.json();
   return data.map(wpToMovie);
@@ -57,7 +68,7 @@ export async function fetchMovieBySlug(slug: string): Promise<Movie> {
     return movie;
   }
 
-  const res = await fetch(`${WP_BASE}/movies?slug=${slug}&_embed&acf_format=standard`);
+  const res = await fetchWithTimeout(`${WP_BASE}/movies?slug=${slug}&_embed&acf_format=standard`);
   if (!res.ok) throw new Error(`WP API error: ${res.status}`);
   const data: WPMovie[] = await res.json();
   if (!data[0]) throw new Error(`Movie not found: ${slug}`);

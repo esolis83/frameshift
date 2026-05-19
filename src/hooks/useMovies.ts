@@ -6,6 +6,8 @@ export function useMovies() {
     queryKey: ['movies'],
     queryFn: fetchMovies,
     staleTime: 5 * 60 * 1000,
+    retry: 2,
+    retryDelay: 3000,
   });
 }
 
@@ -15,5 +17,7 @@ export function useMovie(slug: string) {
     queryFn: () => fetchMovieBySlug(slug),
     enabled: Boolean(slug),
     staleTime: 5 * 60 * 1000,
+    retry: 2,
+    retryDelay: 3000,
   });
 }
