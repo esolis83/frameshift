@@ -1,0 +1,56 @@
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.heading {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 1rem;
+}
+
+.rowWrapper {
+  position: relative;
+}
+
+.row {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: scroll;
+  padding: 0.5rem 1rem 1rem;
+  scrollbar-width: none;
+}
+
+.row::-webkit-scrollbar {
+  display: none;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(10, 10, 15, 0.8);
+  color: var(--text-primary);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-card);
+}
+
+.rowWrapper:hover .arrow {
+  opacity: 1;
+}
+
+.arrowLeft {
+  left: 0;
+}
+
+.arrowRight {
+  right: 0;
+}
