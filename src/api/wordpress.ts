@@ -45,10 +45,7 @@ async function fetchWithTimeout(url: string, timeoutMs = 30000): Promise<Respons
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
-    });
+    const res = await fetch(url, { signal: controller.signal });
     return res;
   } finally {
     clearTimeout(id);
@@ -58,7 +55,9 @@ async function fetchWithTimeout(url: string, timeoutMs = 30000): Promise<Respons
 export async function fetchMovies(): Promise<Movie[]> {
   if (USE_MOCK) return mockMovies;
 
-  const res = await fetchWithTimeout(`${WP_BASE}/movies?_embed&acf_format=standard&per_page=100`);
+  // &_cb rotates hourly — busts Hostinger's server-side URL cache without triggering CORS preflight
+  const cb = Math.floor(Date.now() / (1000 * 60 * 60));
+  const res = await fetchWithTimeout(`${WP_BASE}/movies?_embed&acf_format=standard&per_page=100&_cb=${cb}`);
   if (!res.ok) throw new Error(`WP API error: ${res.status}`);
   const data: WPMovie[] = await res.json();
   return data.map(wpToMovie);
