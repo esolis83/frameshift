@@ -4,12 +4,9 @@ import styles from './IntroAnimation.module.css';
 
 const FRAME  = 'FRAME'.split('');
 const SHIFT  = 'SHIFT'.split('');
-const TOTAL  = FRAME.length + SHIFT.length; // 10
-const MS     = 110;  // ms per letter
-const OFFSET = 32;   // px — each word offsets this far from centre before merging
-
-// Gentle spring — slow start, organic deceleration, no crash
-const MERGE_SPRING = { type: 'spring', stiffness: 22, damping: 14, mass: 1.3 } as const;
+const TOTAL  = FRAME.length + SHIFT.length;
+const MS     = 110;   // ms per letter
+const OFFSET = 34;    // px — each word offsets this far before merging
 
 type Phase = 'typing' | 'merging' | 'glowing';
 
@@ -19,26 +16,24 @@ export function IntroAnimation({ onComplete }: Props) {
   const [count, setCount] = useState(0);
   const [phase, setPhase] = useState<Phase>('typing');
 
-  // Single counter — drives both words letter by letter
+  // Single counter drives all 10 letters
   useEffect(() => {
     if (phase !== 'typing') return;
     if (count < TOTAL) {
-      const delay = count === FRAME.length ? 320 : MS; // pause between words
+      const delay = count === FRAME.length ? 320 : MS;
       const t = setTimeout(() => setCount((c) => c + 1), delay);
       return () => clearTimeout(t);
     }
-    const t = setTimeout(() => setPhase('merging'), 240);
+    const t = setTimeout(() => setPhase('merging'), 250);
     return () => clearTimeout(t);
   }, [count, phase]);
 
-  // Wait for spring to fully settle, then glow
   useEffect(() => {
     if (phase !== 'merging') return;
-    const t = setTimeout(() => setPhase('glowing'), 2500);
+    const t = setTimeout(() => setPhase('glowing'), 2600);
     return () => clearTimeout(t);
   }, [phase]);
 
-  // Glow → exit
   useEffect(() => {
     if (phase !== 'glowing') return;
     const t = setTimeout(onComplete, 900);
@@ -47,12 +42,18 @@ export function IntroAnimation({ onComplete }: Props) {
 
   const frameLetters = Math.min(count, FRAME.length);
   const shiftLetters = Math.max(0, count - FRAME.length);
-  const merged       = phase === 'merging' || phase === 'glowing';
-  const glowing      = phase === 'glowing';
+  const merged  = phase === 'merging' || phase === 'glowing';
+  const glowing = phase === 'glowing';
+
+  // Per-property transition: letters pop in fast, x slides via spring
+  const letterTransition = {
+    opacity: { duration: 0.16, ease: 'easeOut' as const },
+    y:       { duration: 0.16, ease: 'easeOut' as const },
+    x:       { type: 'spring' as const, stiffness: 22, damping: 14, mass: 1.3 },
+  };
 
   return (
     <>
-      {/* Dark backdrop — fades out on exit */}
       <motion.div
         className={styles.backdrop}
         initial={{ opacity: 1 }}
@@ -60,7 +61,6 @@ export function IntroAnimation({ onComplete }: Props) {
         transition={{ duration: 0.65, ease: 'easeInOut' }}
       />
 
-      {/* Logo wrapper — layoutId flies this to NavBar on exit */}
       <motion.div
         layoutId="frameshift-logo"
         className={styles.logoWrap}
@@ -71,45 +71,39 @@ export function IntroAnimation({ onComplete }: Props) {
         }}
         transition={{ filter: { duration: 0.45 } }}
       >
-        {/* FRAME — already at offset on mount, spring fires only on merge */}
-        <motion.span
-          className={styles.word}
-          initial={{ x: -OFFSET }}
-          animate={{ x: merged ? 0 : -OFFSET }}
-          transition={MERGE_SPRING}
-        >
-          {FRAME.map((letter, i) => (
-            <motion.span
-              key={`f${i}`}
-              className={styles.letter}
-              initial={{ opacity: 0, y: 22 }}
-              animate={frameLetters > i ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-            >
-              {letter}
-            </motion.span>
-          ))}
-        </motion.span>
+        {/* FRAME letters — offset LEFT, slide RIGHT to 0 on merge */}
+        {FRAME.map((letter, i) => (
+          <motion.span
+            key={`f${i}`}
+            className={styles.letter}
+            initial={{ opacity: 0, y: 22, x: -OFFSET }}
+            animate={
+              frameLetters > i
+                ? { opacity: 1, y: 0, x: merged ? 0 : -OFFSET }
+                : { opacity: 0, y: 22, x: -OFFSET }
+            }
+            transition={letterTransition}
+          >
+            {letter}
+          </motion.span>
+        ))}
 
-        {/* SHIFT — already at offset on mount, spring fires only on merge */}
-        <motion.span
-          className={styles.word}
-          initial={{ x: OFFSET }}
-          animate={{ x: merged ? 0 : OFFSET }}
-          transition={MERGE_SPRING}
-        >
-          {SHIFT.map((letter, i) => (
-            <motion.span
-              key={`s${i}`}
-              className={styles.letter}
-              initial={{ opacity: 0, y: 22 }}
-              animate={shiftLetters > i ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
-            >
-              {letter}
-            </motion.span>
-          ))}
-        </motion.span>
+        {/* SHIFT letters — offset RIGHT, slide LEFT to 0 on merge */}
+        {SHIFT.map((letter, i) => (
+          <motion.span
+            key={`s${i}`}
+            className={styles.letter}
+            initial={{ opacity: 0, y: 22, x: OFFSET }}
+            animate={
+              shiftLetters > i
+                ? { opacity: 1, y: 0, x: merged ? 0 : OFFSET }
+                : { opacity: 0, y: 22, x: OFFSET }
+            }
+            transition={letterTransition}
+          >
+            {letter}
+          </motion.span>
+        ))}
 
         {/* Blinking cursor */}
         {!glowing && (
