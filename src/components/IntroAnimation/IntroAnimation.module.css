@@ -13,8 +13,7 @@
   z-index: 9999;
   display: flex;
   align-items: center;
-  /* start with the gap — Framer Motion animates columnGap to 0 on merge */
-  column-gap: 52px;
+  /* words sit adjacent — x transforms create + close the visual gap */
   /* Match NavBar logo styling exactly so layoutId transition looks seamless */
   font-family: var(--font-sans);
   font-weight: 900;
