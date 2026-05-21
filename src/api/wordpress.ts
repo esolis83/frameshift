@@ -45,7 +45,10 @@ async function fetchWithTimeout(url: string, timeoutMs = 30000): Promise<Respons
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { signal: controller.signal });
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
+    });
     return res;
   } finally {
     clearTimeout(id);
