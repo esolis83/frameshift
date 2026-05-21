@@ -71,9 +71,10 @@ export function IntroAnimation({ onComplete }: Props) {
         }}
         transition={{ filter: { duration: 0.45 } }}
       >
-        {/* FRAME — starts shifted LEFT, slides RIGHT to meet centre */}
+        {/* FRAME — already at offset on mount, spring fires only on merge */}
         <motion.span
           className={styles.word}
+          initial={{ x: -OFFSET }}
           animate={{ x: merged ? 0 : -OFFSET }}
           transition={MERGE_SPRING}
         >
@@ -90,9 +91,10 @@ export function IntroAnimation({ onComplete }: Props) {
           ))}
         </motion.span>
 
-        {/* SHIFT — starts shifted RIGHT, slides LEFT to meet centre */}
+        {/* SHIFT — already at offset on mount, spring fires only on merge */}
         <motion.span
           className={styles.word}
+          initial={{ x: OFFSET }}
           animate={{ x: merged ? 0 : OFFSET }}
           transition={MERGE_SPRING}
         >
