@@ -24,13 +24,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to Hostinger via SCP
-        uses: appleboy/scp-action@v0.1.7
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host:     145.223.107.106
-          port:     65002
-          username: u585258838
-          password: ${{ secrets.FTP_PASSWORD }}
-          source:   dist/*
-          target:   public_html/frameshift
-          strip_components: 1
+          server:     145.223.107.106
+          username:   u585258838
+          password:   ${{ secrets.FTP_PASSWORD }}
+          local-dir:  ./dist/
+          server-dir: /public_html/frameshift/
+          security:   loose
