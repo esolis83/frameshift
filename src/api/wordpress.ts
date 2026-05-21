@@ -70,7 +70,8 @@ export async function fetchMovieBySlug(slug: string): Promise<Movie> {
     return movie;
   }
 
-  const res = await fetchWithTimeout(`${WP_BASE}/movies?slug=${slug}&_embed&acf_format=standard`);
+  const cb = Math.floor(Date.now() / (1000 * 60 * 60));
+  const res = await fetchWithTimeout(`${WP_BASE}/movies?slug=${slug}&_embed&acf_format=standard&_cb=${cb}`);
   if (!res.ok) throw new Error(`WP API error: ${res.status}`);
   const data: WPMovie[] = await res.json();
   if (!data[0]) throw new Error(`Movie not found: ${slug}`);
