@@ -109,3 +109,32 @@
   background: var(--accent-light);
   box-shadow: 0 0 16px var(--accent-glow-strong);
 }
+
+@media (max-width: 640px) {
+  .hero {
+    height: 75vh;
+    min-height: 460px;
+    /* Panel sits at the bottom on mobile */
+    align-items: flex-end;
+  }
+
+  /* Stronger bottom-up fade on mobile so panel is readable */
+  .gradient {
+    background:
+      linear-gradient(to bottom, rgba(8, 7, 9, 0.1) 0%, rgba(8, 7, 9, 0.7) 45%, var(--bg-primary) 100%);
+  }
+
+  .glassPanel {
+    margin: 0 1rem 1.5rem;
+    max-width: 100%;
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .title {
+    font-size: clamp(1.5rem, 7vw, 1.9rem);
+  }
+
+  .synopsis {
+    -webkit-line-clamp: 2;
+  }
+}

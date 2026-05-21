@@ -103,3 +103,17 @@
   font-weight: 600;
   color: var(--text-muted);
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: calc(var(--nav-height) + 2rem) 1rem 3rem;
+  }
+
+  .heading {
+    font-size: var(--font-size-xl);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -235,3 +235,52 @@
 .errorLink:hover {
   color: var(--accent);
 }
+
+@media (max-width: 640px) {
+  .hero {
+    height: 45vh;
+    min-height: 280px;
+  }
+
+  .back {
+    top: 1rem;
+    left: 1rem;
+    font-size: var(--font-size-xs);
+    padding: 0.3rem 0.75rem;
+  }
+
+  .infoPanel {
+    margin: -3rem auto 0;
+    padding: 0 1rem;
+  }
+
+  /* Stack poster + info vertically on mobile */
+  .glassPanelInner {
+    flex-direction: column;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .poster {
+    width: 80px;
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .body {
+    padding: 0 1rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .body {
+    padding: 0 1.25rem;
+  }
+
+  .infoPanel {
+    padding: 0 1.25rem;
+  }
+}
