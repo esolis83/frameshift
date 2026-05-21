@@ -14,7 +14,7 @@ export function NavBar() {
   return (
     <nav className={styles.nav}>
       <Link to="/" className={styles.logo}>
-        FRAMESHIFTs
+        FRAMESHIFT
       </Link>
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input

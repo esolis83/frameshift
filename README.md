@@ -77,10 +77,4 @@ npm run dev
 
 ## Deployment
 
-Frontend deploys to Netlify via drag-and-drop of the `dist` folder:
-
-```bash
-npm run build
-```
-
-Then drag `dist` to [netlify.com/drop](https://netlify.com/drop).
+Netlify is connected to the `main` branch on GitHub. Every push to `main` automatically builds and deploys to `frameshift.enriquesolis.me`.
