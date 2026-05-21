@@ -9,12 +9,6 @@ import { makeStaggerContainer, pageTransition } from '../lib/variants';
 import type { Movie } from '../data/mockMovies';
 import styles from './Browse.module.css';
 
-// Computed once at module load — value is stable for the page's lifetime
-const ROWS_VARIANTS = makeStaggerContainer(
-  0.14,
-  sessionStorage.getItem(INTRO_SEEN_KEY) ? 0.3 : 5.8
-);
-
 export default function Browse() {
   const { data: movies, isLoading, isError } = useMovies();
 
@@ -52,12 +46,18 @@ export default function Browse() {
     </div>
   );
 
+  // Re-evaluated on every mount — 0.3s delay once intro is done, 5.8s on first visit
+  const rowsVariants = makeStaggerContainer(
+    0.14,
+    sessionStorage.getItem(INTRO_SEEN_KEY) ? 0.3 : 5.8
+  );
+
   return (
     <motion.main {...pageTransition}>
       <HeroSection movie={featured} />
       <motion.div
         className={styles.rowsWrapper}
-        variants={ROWS_VARIANTS}
+        variants={rowsVariants}
         initial="hidden"
         animate="show"
       >
