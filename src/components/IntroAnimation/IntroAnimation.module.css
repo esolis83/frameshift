@@ -1,0 +1,40 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  z-index: 9998;
+}
+
+.logoWrap {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  /* Match NavBar logo styling exactly so layoutId transition looks seamless */
+  font-family: var(--font-sans);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  /* Start big, Framer Motion layout will animate size down to NavBar size */
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+}
+
+.letter {
+  display: inline-block;
+}
+
+.cursor {
+  display: inline-block;
+  /* Use a regular color — not gradient — so it doesn't clip with -webkit-text-fill */
+  -webkit-text-fill-color: #f59e0b;
+  color: #f59e0b;
+  margin-left: 2px;
+  font-weight: 300;
+}
