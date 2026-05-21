@@ -1,0 +1,105 @@
+.page {
+  min-height: 100vh;
+  padding: calc(var(--nav-height) + 3rem) 2.5rem 4rem;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.label::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 12px;
+  background: linear-gradient(to bottom, var(--accent-light), var(--accent));
+  border-radius: 2px;
+}
+
+.heading {
+  font-size: var(--font-size-2xl);
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.query {
+  color: var(--accent);
+}
+
+.count {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ── Results grid ────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* ── Empty / no-query states ─────────────────────── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  opacity: 0.4;
+}
+
+.emptyTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyText {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+/* ── Prompt (no query typed yet) ─────────────────── */
+.prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.promptIcon {
+  font-size: 3.5rem;
+  margin-bottom: 1.25rem;
+  opacity: 0.25;
+}
+
+.promptText {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-muted);
+}

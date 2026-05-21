@@ -1,0 +1,237 @@
+.page {
+  min-height: 100vh;
+}
+
+/* ── Backdrop hero ───────────────────────────────── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 65vh;
+  min-height: 420px;
+  background-size: cover;
+  background-position: center;
+  margin-top: var(--nav-height);
+}
+
+.heroGradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(8, 7, 9, 0.25) 0%, var(--bg-primary) 100%),
+    linear-gradient(to right, rgba(8, 7, 9, 0.6) 0%, transparent 60%);
+}
+
+/* ── Back link inside hero ───────────────────────── */
+.back {
+  position: absolute;
+  top: 1.5rem;
+  left: 2rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 0.35rem 0.875rem;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.back:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── Glass info panel (overlaps hero) ────────────── */
+.infoPanel {
+  position: relative;
+  z-index: 2;
+  max-width: 860px;
+  margin: -5rem auto 0;
+  padding: 0 2rem;
+}
+
+.glassPanelInner {
+  background: rgba(10, 9, 12, 0.75);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-modal);
+  padding: 1.75rem 2rem 2rem;
+  display: flex;
+  gap: 1.75rem;
+  align-items: flex-start;
+}
+
+.poster {
+  width: 120px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--glass-border);
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.genreTag {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 0.18rem 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: clamp(1.5rem, 3vw, var(--font-size-2xl));
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.rating {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.metaDot {
+  opacity: 0.35;
+}
+
+.synopsis {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Body content ────────────────────────────────── */
+.body {
+  max-width: 860px;
+  margin: 2rem auto 4rem;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ── Section shared style ────────────────────────── */
+.sectionHeading {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sectionHeading::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 12px;
+  background: linear-gradient(to bottom, var(--accent-light), var(--accent));
+  border-radius: 2px;
+}
+
+/* ── Cast grid ───────────────────────────────────── */
+.castGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  list-style: none;
+  padding: 0;
+}
+
+.castCard {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.875rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.castRole {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ── Trailer ─────────────────────────────────────── */
+.trailerWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.trailerFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ── Loading / error ─────────────────────────────── */
+.loading,
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1rem;
+  color: var(--text-muted);
+}
+
+.errorText {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+}
+
+.errorLink {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--glass-border);
+  transition: color var(--transition-fast);
+}
+
+.errorLink:hover {
+  color: var(--accent);
+}
