@@ -42,7 +42,7 @@ export function IntroAnimation({ onComplete }: Props) {
   // ── 3. Merge → glow ──────────────────────────────
   useEffect(() => {
     if (phase !== 'merging') return;
-    const t = setTimeout(() => setPhase('glowing'), 500);
+    const t = setTimeout(() => setPhase('glowing'), 1100); // wait for full slide
     return () => clearTimeout(t);
   }, [phase]);
 
@@ -97,7 +97,7 @@ export function IntroAnimation({ onComplete }: Props) {
           className={styles.word}
           initial={{ x: '0.9em' }}
           animate={{ x: merged ? 0 : '0.9em' }}
-          transition={{ duration: 0.42, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 1.0, ease: 'easeInOut' }}
         >
           {SHIFT.map((letter, i) => (
             <motion.span
