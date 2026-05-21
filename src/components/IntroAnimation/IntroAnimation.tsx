@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styles from './IntroAnimation.module.css';
 
-const FRAME  = 'FRAME'.split('');
-const SHIFT  = 'SHIFT'.split('');
-const TOTAL  = FRAME.length + SHIFT.length;
-const MS     = 110;   // ms per letter
-const OFFSET = 34;    // px — each word offsets this far before merging
+const FRAME = 'FRAME'.split('');
+const SHIFT = 'SHIFT'.split('');
+const TOTAL = FRAME.length + SHIFT.length; // 10
+const MS    = 110; // ms per letter
 
 type Phase = 'typing' | 'merging' | 'glowing';
 
@@ -16,21 +15,21 @@ export function IntroAnimation({ onComplete }: Props) {
   const [count, setCount] = useState(0);
   const [phase, setPhase] = useState<Phase>('typing');
 
-  // Single counter drives all 10 letters
+  // Letter-by-letter counter
   useEffect(() => {
     if (phase !== 'typing') return;
     if (count < TOTAL) {
-      const delay = count === FRAME.length ? 320 : MS;
+      const delay = count === FRAME.length ? 340 : MS; // pause between words
       const t = setTimeout(() => setCount((c) => c + 1), delay);
       return () => clearTimeout(t);
     }
-    const t = setTimeout(() => setPhase('merging'), 250);
+    const t = setTimeout(() => setPhase('merging'), 260);
     return () => clearTimeout(t);
   }, [count, phase]);
 
   useEffect(() => {
     if (phase !== 'merging') return;
-    const t = setTimeout(() => setPhase('glowing'), 2600);
+    const t = setTimeout(() => setPhase('glowing'), 2800);
     return () => clearTimeout(t);
   }, [phase]);
 
@@ -45,15 +44,9 @@ export function IntroAnimation({ onComplete }: Props) {
   const merged  = phase === 'merging' || phase === 'glowing';
   const glowing = phase === 'glowing';
 
-  // Per-property transition: letters pop in fast, x slides via spring
-  const letterTransition = {
-    opacity: { duration: 0.16, ease: 'easeOut' as const },
-    y:       { duration: 0.16, ease: 'easeOut' as const },
-    x:       { type: 'spring' as const, stiffness: 22, damping: 14, mass: 1.3 },
-  };
-
   return (
     <>
+      {/* Dark backdrop */}
       <motion.div
         className={styles.backdrop}
         initial={{ opacity: 1 }}
@@ -61,6 +54,7 @@ export function IntroAnimation({ onComplete }: Props) {
         transition={{ duration: 0.65, ease: 'easeInOut' }}
       />
 
+      {/* Logo — layoutId flies to NavBar on exit */}
       <motion.div
         layoutId="frameshift-logo"
         className={styles.logoWrap}
@@ -71,35 +65,42 @@ export function IntroAnimation({ onComplete }: Props) {
         }}
         transition={{ filter: { duration: 0.45 } }}
       >
-        {/* FRAME letters — offset LEFT, slide RIGHT to 0 on merge */}
+        {/* FRAME — types letter by letter */}
         {FRAME.map((letter, i) => (
           <motion.span
             key={`f${i}`}
             className={styles.letter}
-            initial={{ opacity: 0, y: 22, x: -OFFSET }}
+            initial={{ opacity: 0, y: 20 }}
             animate={
               frameLetters > i
-                ? { opacity: 1, y: 0, x: merged ? 0 : -OFFSET }
-                : { opacity: 0, y: 22, x: -OFFSET }
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 20 }
             }
-            transition={letterTransition}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
           >
             {letter}
           </motion.span>
         ))}
 
-        {/* SHIFT letters — offset RIGHT, slide LEFT to 0 on merge */}
+        {/* Gap spacer — holds FRAME and SHIFT apart, springs shut on merge */}
+        <motion.span
+          className={styles.spacer}
+          animate={{ width: merged ? '0em' : '0.5em' }}
+          transition={{ type: 'spring', stiffness: 20, damping: 13, mass: 1.4 }}
+        />
+
+        {/* SHIFT — types letter by letter */}
         {SHIFT.map((letter, i) => (
           <motion.span
             key={`s${i}`}
             className={styles.letter}
-            initial={{ opacity: 0, y: 22, x: OFFSET }}
+            initial={{ opacity: 0, y: 20 }}
             animate={
               shiftLetters > i
-                ? { opacity: 1, y: 0, x: merged ? 0 : OFFSET }
-                : { opacity: 0, y: 22, x: OFFSET }
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 20 }
             }
-            transition={letterTransition}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
           >
             {letter}
           </motion.span>
