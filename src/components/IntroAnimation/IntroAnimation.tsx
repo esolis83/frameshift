@@ -6,7 +6,7 @@ const FRAME   = 'FRAME'.split('');
 const SHIFT   = 'SHIFT'.split('');
 const TOTAL   = FRAME.length + SHIFT.length; // 10
 const MS      = 110;  // ms per letter
-const GAP_PX  = 32;   // starting gap between the two words in px
+const GAP_PX  = 52;   // starting gap between the two words in px
 
 type Phase = 'typing' | 'merging' | 'glowing';
 
@@ -35,7 +35,7 @@ export function IntroAnimation({ onComplete }: Props) {
   // After merge animation finishes, start glow
   useEffect(() => {
     if (phase !== 'merging') return;
-    const t = setTimeout(() => setPhase('glowing'), 1300); // > merge duration
+    const t = setTimeout(() => setPhase('glowing'), 2200); // > spring settle time
     return () => clearTimeout(t);
   }, [phase]);
 
@@ -72,7 +72,10 @@ export function IntroAnimation({ onComplete }: Props) {
             ? 'drop-shadow(0 0 30px rgba(245,158,11,0.75))'
             : 'drop-shadow(0 0 0px rgba(245,158,11,0))',
         }}
-        transition={{ duration: 1.2, ease: 'easeInOut' }}
+        transition={{
+          columnGap: { type: 'spring', stiffness: 28, damping: 16, mass: 1.2 },
+          filter:    { duration: 0.45 },
+        }}
       >
         {/* ── FRAME ── */}
         <span className={styles.word}>
