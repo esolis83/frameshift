@@ -46,11 +46,20 @@ export default function Browse() {
       transition={{ duration: 0.3 }}
     >
       <HeroSection movie={featured} />
-      <div style={{ padding: '2rem 0' }}>
+      {/* Stagger container — each GenreRow cascades in after the hero */}
+      <motion.div
+        style={{ padding: '2rem 0' }}
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: 0.14, delayChildren: 0.35 } },
+        }}
+        initial="hidden"
+        animate="show"
+      >
         {Object.entries(byGenre).map(([genre, genreMovies]) => (
           <GenreRow key={genre} genre={genre} movies={genreMovies} />
         ))}
-      </div>
+      </motion.div>
       <footer style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)', fontSize: 'var(--font-size-xs)' }}>
         Powered by WordPress REST API
       </footer>
