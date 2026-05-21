@@ -1,0 +1,56 @@
+.loadingWrap,
+.errorWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 1.25rem;
+  color: var(--text-muted);
+}
+
+.loadingText {
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.errorTitle {
+  font-size: 1.1rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.errorSubtext {
+  font-size: var(--font-size-sm);
+}
+
+.retryBtn {
+  margin-top: 0.25rem;
+  padding: 0.55rem 1.5rem;
+  background: var(--accent);
+  color: var(--bg-deep);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: background var(--transition-fast);
+}
+
+.retryBtn:hover {
+  background: var(--accent-light);
+}
+
+.rowsWrapper {
+  padding: 2rem 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}

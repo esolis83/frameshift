@@ -1,42 +1,47 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { NavBar } from './components/NavBar/NavBar';
 import { DetailModal } from './components/DetailModal/DetailModal';
 import { IntroAnimation } from './components/IntroAnimation/IntroAnimation';
+import { useModalStore } from './store/modalStore';
+import { INTRO_SEEN_KEY } from './constants';
 
-const Browse     = lazy(() => import('./pages/Browse'));
+const Browse      = lazy(() => import('./pages/Browse'));
 const MovieDetail = lazy(() => import('./pages/MovieDetail'));
-const Search     = lazy(() => import('./pages/Search'));
+const Search      = lazy(() => import('./pages/Search'));
 
-// Only show the intro once per browser session
 function shouldShowIntro() {
   if (typeof window === 'undefined') return false;
-  return !sessionStorage.getItem('fs-intro-seen');
+  return !sessionStorage.getItem(INTRO_SEEN_KEY);
 }
 
 export default function App() {
-  const location = useLocation();
+  const location  = useLocation();
   const [showIntro, setShowIntro] = useState(shouldShowIntro);
+  const closeModal = useModalStore((s) => s.closeModal);
+
+  // Close any open modal when the route changes so the layoutId return
+  // animation doesn't try to morph back to a card on the exiting page
+  useEffect(() => {
+    closeModal();
+  }, [location.pathname, closeModal]);
 
   function handleIntroDone() {
-    sessionStorage.setItem('fs-intro-seen', '1');
+    sessionStorage.setItem(INTRO_SEEN_KEY, '1');
     setShowIntro(false);
   }
 
   return (
     <>
-      {/* NavBar — logo gets layoutId only AFTER intro exits, which triggers the fly animation */}
       <NavBar logoLayoutId={showIntro ? undefined : 'frameshift-logo'} />
 
-      {/* Intro overlay — AnimatePresence drives the exit + layoutId fly */}
       <AnimatePresence>
         {showIntro && (
           <IntroAnimation key="intro" onComplete={handleIntroDone} />
         )}
       </AnimatePresence>
 
-      {/* Page routes */}
       <AnimatePresence mode="wait">
         <Suspense fallback={null}>
           <Routes location={location} key={location.pathname}>

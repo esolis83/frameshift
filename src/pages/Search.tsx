@@ -2,17 +2,10 @@ import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useMovies } from '../hooks/useMovies';
 import { MovieCard } from '../components/MovieCard/MovieCard';
+import { makeStaggerContainer, fadeUpVariant, pageTransition } from '../lib/variants';
 import styles from './Search.module.css';
 
-const containerVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.06 } },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 16 },
-  show:   { opacity: 1, y: 0,  transition: { duration: 0.3 } },
-};
+const gridVariants = makeStaggerContainer(0.06);
 
 export default function Search() {
   const [params] = useSearchParams();
@@ -26,23 +19,8 @@ export default function Search() {
   );
 
   return (
-    <motion.main
-      className={styles.page}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* No query yet */}
-      {!q && (
-        <div className={styles.prompt}>
-          <div className={styles.promptIcon}>🔍</div>
-          <p className={styles.promptText}>Type a title or genre to search</p>
-        </div>
-      )}
-
-      {/* Has query */}
-      {q && (
+    <motion.main className={styles.page} {...pageTransition}>
+      {q ? (
         <>
           <div className={styles.header}>
             <p className={styles.label}>Search results</p>
@@ -65,18 +43,23 @@ export default function Search() {
           ) : (
             <motion.div
               className={styles.grid}
-              variants={containerVariants}
+              variants={gridVariants}
               initial="hidden"
               animate="show"
             >
               {results.map((movie) => (
-                <motion.div key={movie.id} variants={itemVariants}>
+                <motion.div key={movie.id} variants={fadeUpVariant}>
                   <MovieCard movie={movie} />
                 </motion.div>
               ))}
             </motion.div>
           )}
         </>
+      ) : (
+        <div className={styles.prompt}>
+          <div className={styles.promptIcon}>🔍</div>
+          <p className={styles.promptText}>Type a title or genre to search</p>
+        </div>
       )}
     </motion.main>
   );

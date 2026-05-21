@@ -1,63 +1,63 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useMovies } from '../hooks/useMovies';
 import { HeroSection } from '../components/HeroSection/HeroSection';
 import { GenreRow } from '../components/GenreRow/GenreRow';
+import { Spinner } from '../components/Spinner/Spinner';
+import { INTRO_SEEN_KEY } from '../constants';
+import { makeStaggerContainer, pageTransition } from '../lib/variants';
 import type { Movie } from '../data/mockMovies';
+import styles from './Browse.module.css';
+
+// Computed once at module load — value is stable for the page's lifetime
+const ROWS_VARIANTS = makeStaggerContainer(
+  0.14,
+  sessionStorage.getItem(INTRO_SEEN_KEY) ? 0.3 : 5.8
+);
 
 export default function Browse() {
   const { data: movies, isLoading, isError } = useMovies();
 
+  // Hooks before early returns — null-guarded inside
+  const featured = useMemo(
+    () => movies ? (movies.find((m) => m.isFeatured) ?? movies[0]) : null,
+    [movies]
+  );
+
+  const byGenre = useMemo(
+    () => (movies ?? []).reduce<Record<string, Movie[]>>((acc, movie) => {
+      movie.genre.forEach((g) => {
+        if (!acc[g]) acc[g] = [];
+        acc[g].push(movie);
+      });
+      return acc;
+    }, {}),
+    [movies]
+  );
+
   if (isLoading) return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '1.5rem', color: 'var(--text-muted)' }}>
-      <div style={{ width: 44, height: 44, border: '3px solid rgba(245,158,11,0.15)', borderTop: '3px solid var(--accent)', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }} />
-      <p style={{ fontSize: '0.9rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Loading Frameshift…</p>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    <div className={styles.loadingWrap}>
+      <Spinner />
+      <p className={styles.loadingText}>Loading Frameshift…</p>
     </div>
   );
 
-  if (isError || !movies) return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '1rem', color: 'var(--text-muted)' }}>
-      <p style={{ fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 700 }}>Could not connect to the server.</p>
-      <p style={{ fontSize: '0.875rem' }}>The server may be waking up — please try again.</p>
-      <button
-        onClick={() => window.location.reload()}
-        style={{ marginTop: '0.5rem', padding: '0.55rem 1.5rem', background: 'var(--accent)', color: 'var(--bg-deep)', border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 700, fontFamily: 'var(--font-sans)', letterSpacing: '0.03em' }}
-      >
+  if (isError || !movies || !featured) return (
+    <div className={styles.errorWrap}>
+      <p className={styles.errorTitle}>Could not connect to the server.</p>
+      <p className={styles.errorSubtext}>The server may be waking up — please try again.</p>
+      <button className={styles.retryBtn} onClick={() => window.location.reload()}>
         Retry
       </button>
     </div>
   );
 
-  const featured = movies.find((m) => m.isFeatured) ?? movies[0];
-
-  const byGenre = movies.reduce<Record<string, Movie[]>>((acc, movie) => {
-    movie.genre.forEach((g) => {
-      if (!acc[g]) acc[g] = [];
-      acc[g].push(movie);
-    });
-    return acc;
-  }, {});
-
-  // On first visit the intro plays for ~5.5s — delay stagger until it's done.
-  // On return visits (intro already seen) use a short delay.
-  const introPlaying = !sessionStorage.getItem('fs-intro-seen');
-  const staggerDelay = introPlaying ? 5.8 : 0.3;
-
   return (
-    <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <motion.main {...pageTransition}>
       <HeroSection movie={featured} />
-      {/* Stagger container — each GenreRow cascades in after the hero */}
       <motion.div
-        style={{ padding: '2rem 0' }}
-        variants={{
-          hidden: {},
-          show: { transition: { staggerChildren: 0.14, delayChildren: staggerDelay } },
-        }}
+        className={styles.rowsWrapper}
+        variants={ROWS_VARIANTS}
         initial="hidden"
         animate="show"
       >
@@ -65,9 +65,7 @@ export default function Browse() {
           <GenreRow key={genre} genre={genre} movies={genreMovies} />
         ))}
       </motion.div>
-      <footer style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)', fontSize: 'var(--font-size-xs)' }}>
-        Powered by WordPress REST API
-      </footer>
+      <footer className={styles.footer}>Powered by WordPress REST API</footer>
     </motion.main>
   );
 }

@@ -1,6 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useMovie } from '../hooks/useMovies';
+import { Spinner } from '../components/Spinner/Spinner';
+import { pageTransition } from '../lib/variants';
 import styles from './MovieDetail.module.css';
 
 export default function MovieDetail() {
@@ -9,8 +11,7 @@ export default function MovieDetail() {
 
   if (isLoading) return (
     <div className={styles.loading}>
-      <div style={{ width: 40, height: 40, border: '3px solid rgba(245,158,11,0.15)', borderTop: '3px solid var(--accent)', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <Spinner size={40} />
     </div>
   );
 
@@ -22,14 +23,7 @@ export default function MovieDetail() {
   );
 
   return (
-    <motion.div
-      className={styles.page}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.35 }}
-    >
-      {/* ── Backdrop hero ── */}
+    <motion.div className={styles.page} {...pageTransition} transition={{ duration: 0.35 }}>
       <div
         className={styles.hero}
         style={{ backgroundImage: `url(${movie.backdropUrl})` }}
@@ -38,7 +32,6 @@ export default function MovieDetail() {
         <Link to="/" className={styles.back}>← Browse</Link>
       </div>
 
-      {/* ── Glass info panel (overlaps hero) ── */}
       <motion.div
         className={styles.infoPanel}
         initial={{ opacity: 0, y: 24 }}
@@ -66,14 +59,12 @@ export default function MovieDetail() {
         </div>
       </motion.div>
 
-      {/* ── Body ── */}
       <motion.div
         className={styles.body}
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
       >
-        {/* Cast */}
         {movie.cast.length > 0 && (
           <section>
             <h2 className={styles.sectionHeading}>Cast</h2>
@@ -88,7 +79,6 @@ export default function MovieDetail() {
           </section>
         )}
 
-        {/* Trailer */}
         {movie.trailerUrl && (
           <section>
             <h2 className={styles.sectionHeading}>Trailer</h2>

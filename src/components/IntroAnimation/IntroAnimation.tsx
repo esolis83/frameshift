@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import styles from './IntroAnimation.module.css';
 
@@ -14,6 +14,10 @@ interface Props { onComplete: () => void }
 export function IntroAnimation({ onComplete }: Props) {
   const [count, setCount] = useState(0);
   const [phase, setPhase] = useState<Phase>('typing');
+
+  // Stable ref so the glowing effect never re-runs if parent re-renders
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => { onCompleteRef.current = onComplete; });
 
   // Letter-by-letter counter
   useEffect(() => {
@@ -35,9 +39,9 @@ export function IntroAnimation({ onComplete }: Props) {
 
   useEffect(() => {
     if (phase !== 'glowing') return;
-    const t = setTimeout(onComplete, 900);
+    const t = setTimeout(() => onCompleteRef.current(), 900);
     return () => clearTimeout(t);
-  }, [phase, onComplete]);
+  }, [phase]); // onCompleteRef is stable — no dep needed
 
   const frameLetters = Math.min(count, FRAME.length);
   const shiftLetters = Math.max(0, count - FRAME.length);

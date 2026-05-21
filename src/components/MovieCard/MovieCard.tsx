@@ -2,13 +2,13 @@ import { motion } from 'framer-motion';
 import type { Movie } from '../../data/mockMovies';
 import { useHoverVideo } from '../../hooks/useHoverVideo';
 import { useModalStore } from '../../store/modalStore';
+import { TOP_RATED_THRESHOLD } from '../../constants';
 import styles from './MovieCard.module.css';
 
 interface MovieCardProps {
   movie: Movie;
 }
 
-// Scale on inner wrapper — never conflicts with layoutId exit animation
 const scaleVariants = {
   rest:  { scale: 1 },
   hover: { scale: 1.04, transition: { duration: 0.3, ease: 'easeOut' as const } },
@@ -26,13 +26,13 @@ export function MovieCard({ movie }: MovieCardProps) {
   return (
     <motion.div
       className={styles.card}
-      layoutId={`card-${movie.id}`}
+
       onClick={() => openModal(movie)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && openModal(movie)}
     >
-      {movie.rating >= 8.8 && (
+      {movie.rating >= TOP_RATED_THRESHOLD && (
         <div className={styles.badge}>★ Top Rated</div>
       )}
       <motion.div
@@ -44,7 +44,6 @@ export function MovieCard({ movie }: MovieCardProps) {
         onMouseLeave={onMouseLeave}
         variants={scaleVariants}
       >
-        {/* Widescreen backdrop image */}
         <img
           src={movie.backdropUrl || movie.posterUrl}
           alt={movie.title}

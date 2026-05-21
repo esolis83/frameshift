@@ -7,7 +7,6 @@ import styles from './DetailModal.module.css';
 export function DetailModal() {
   const { activeMovie, closeModal } = useModalStore();
 
-  // body scroll lock while open
   useEffect(() => {
     if (!activeMovie) return;
     const prev = document.body.style.overflow;
@@ -15,7 +14,6 @@ export function DetailModal() {
     return () => { document.body.style.overflow = prev; };
   }, [activeMovie]);
 
-  // ESC to close
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeModal(); };
     window.addEventListener('keydown', onKey);
@@ -26,7 +24,6 @@ export function DetailModal() {
     <AnimatePresence>
       {activeMovie && (
         <>
-          {/* Backdrop — separate from layoutId so it doesn't affect the morph */}
           <motion.div
             className={styles.backdrop}
             initial={{ opacity: 0 }}
@@ -36,27 +33,19 @@ export function DetailModal() {
             onClick={closeModal}
           />
 
-          {/* Modal panel — same layoutId as the clicked MovieCard */}
           <motion.div
             className={styles.modal}
-            layoutId={`card-${activeMovie.id}`}
-            transition={{ type: 'spring', damping: 32, stiffness: 280 }}
+            initial={{ opacity: 0, scale: 0.94, y: 24 }}
+            animate={{ opacity: 1, scale: 1,    y: 0  }}
+            exit={{    opacity: 0, scale: 0.94, y: 24 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           >
-            {/* Hero backdrop image */}
             <div className={styles.hero}>
-              <img
-                src={activeMovie.backdropUrl}
-                alt=""
-                className={styles.heroImage}
-                aria-hidden
-              />
+              <img src={activeMovie.backdropUrl} alt="" className={styles.heroImage} aria-hidden />
               <div className={styles.heroGradient} />
-              <button className={styles.closeBtn} onClick={closeModal} aria-label="Close">
-                ✕
-              </button>
+              <button className={styles.closeBtn} onClick={closeModal} aria-label="Close">✕</button>
             </div>
 
-            {/* Content fades in after layout animation settles */}
             <motion.div
               className={styles.body}
               initial={{ opacity: 0 }}
@@ -65,11 +54,7 @@ export function DetailModal() {
               transition={{ delay: 0.18, duration: 0.2 }}
             >
               <div className={styles.bodyInner}>
-                <img
-                  src={activeMovie.posterUrl}
-                  alt={activeMovie.title}
-                  className={styles.poster}
-                />
+                <img src={activeMovie.posterUrl} alt={activeMovie.title} className={styles.poster} />
                 <div className={styles.info}>
                   <h2 className={styles.title}>{activeMovie.title}</h2>
                   <p className={styles.meta}>
@@ -98,11 +83,7 @@ export function DetailModal() {
                 </div>
               )}
 
-              <Link
-                to={`/movie/${activeMovie.slug}`}
-                className={styles.fullPageLink}
-                onClick={closeModal}
-              >
+              <Link to={`/movie/${activeMovie.slug}`} className={styles.fullPageLink}>
                 View full page →
               </Link>
             </motion.div>
