@@ -27,8 +27,8 @@ jobs:
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server:     ${{ secrets.FTP_HOST }}
-          username:   ${{ secrets.FTP_USER }}
-          password:   ${{ secrets.FTP_PASS }}
+          server:     145.223.107.106
+          username:   u585258838
+          password:   ${{ secrets.FTP_PASSWORD }}
           local-dir:  ./dist/
-          server-dir: ${{ secrets.FTP_PATH }}
+          server-dir: /public_html/frameshift/
