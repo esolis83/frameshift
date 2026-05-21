@@ -15,22 +15,26 @@ export function HeroSection({ movie }: HeroSectionProps) {
     >
       <div className={styles.gradient} />
       <motion.div
-        className={styles.content}
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
+        className={styles.glassPanel}
+        initial={{ opacity: 0, x: -28 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-        <p className={styles.genres}>{movie.genre.join(' · ')}</p>
+        <p className={styles.genreTag}>{movie.genre[0]}</p>
         <h1 className={styles.title}>{movie.title}</h1>
         <p className={styles.synopsis}>{movie.synopsis}</p>
         <div className={styles.meta}>
-          <span>{movie.year}</span>
-          <span>{movie.duration}</span>
           <span className={styles.rating}>★ {movie.rating.toFixed(1)}</span>
+          <span className={styles.metaDot}>·</span>
+          <span>{movie.year}</span>
+          <span className={styles.metaDot}>·</span>
+          <span>{movie.duration}</span>
         </div>
-        <Link to={`/movie/${movie.slug}`} className={styles.cta}>
-          More Info
-        </Link>
+        <div className={styles.actions}>
+          <Link to={`/movie/${movie.slug}`} className={styles.ctaPrimary}>
+            More Info
+          </Link>
+        </div>
       </motion.div>
     </section>
   );

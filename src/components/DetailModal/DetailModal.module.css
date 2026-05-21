@@ -1,7 +1,9 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: var(--z-overlay);
 }
 
@@ -9,15 +11,16 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  /* translate is handled inline by Framer Motion — set via CSS here for initial render */
   translate: -50% -50%;
-  width: min(660px, 95vw);
-  max-height: 85vh;
+  width: min(680px, 95vw);
+  max-height: 88vh;
   overflow-y: auto;
-  background: var(--bg-card);
-  border-radius: 10px;
+  background: rgba(10, 9, 12, 0.92);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-modal);
   z-index: var(--z-modal);
-  /* hide scrollbar while keeping scroll */
   scrollbar-width: none;
 }
 
@@ -25,7 +28,7 @@
   display: none;
 }
 
-/* Hero section */
+/* Hero image */
 .hero {
   position: relative;
   height: 260px;
@@ -37,6 +40,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: var(--radius-modal) var(--radius-modal) 0 0;
 }
 
 .heroGradient {
@@ -44,17 +48,19 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(10, 10, 15, 0.1) 0%,
-    rgba(10, 10, 15, 0.85) 100%
+    rgba(10, 9, 12, 0.05) 0%,
+    rgba(10, 9, 12, 0.92) 100%
   );
+  border-radius: var(--radius-modal) var(--radius-modal) 0 0;
 }
 
 .closeBtn {
   position: absolute;
   top: 0.875rem;
   right: 0.875rem;
-  background: rgba(10, 10, 15, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 9, 12, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
   color: var(--text-primary);
   width: 30px;
   height: 30px;
@@ -65,14 +71,15 @@
   justify-content: center;
   cursor: pointer;
   z-index: 1;
-  transition: background 200ms;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .closeBtn:hover {
-  background: rgba(10, 10, 15, 0.95);
+  border-color: var(--accent);
+  background: rgba(10, 9, 12, 0.95);
 }
 
-/* Content body */
+/* Body */
 .body {
   padding: 1.25rem 1.5rem 1.75rem;
 }
@@ -87,10 +94,10 @@
   width: 110px;
   aspect-ratio: 2 / 3;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   flex-shrink: 0;
   margin-top: -3.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--glass-border);
   position: relative;
 }
 
@@ -104,13 +111,14 @@
   font-weight: 800;
   color: var(--text-primary);
   margin: 0 0 0.4rem;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 .meta {
   font-size: var(--font-size-sm);
   color: var(--text-muted);
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.875rem;
 }
 
 .genres {
@@ -122,10 +130,13 @@
 
 .genreTag {
   font-size: var(--font-size-xs);
-  padding: 0.2rem 0.6rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+  color: var(--accent);
+  background: var(--accent-dim);
+  text-transform: capitalize;
 }
 
 .synopsis {
@@ -137,17 +148,17 @@
 
 /* Cast */
 .cast {
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid rgba(245, 158, 11, 0.08);
   padding-top: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 .castHeading {
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  color: var(--accent);
   margin: 0 0 0.75rem;
 }
 
@@ -174,12 +185,13 @@
 .fullPageLink {
   display: inline-block;
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--accent);
   text-decoration: none;
-  transition: opacity 150ms;
+  letter-spacing: 0.03em;
+  transition: opacity var(--transition-fast);
 }
 
 .fullPageLink:hover {
-  opacity: 0.8;
+  opacity: 0.75;
 }

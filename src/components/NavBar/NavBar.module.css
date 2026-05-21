@@ -7,17 +7,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  background: linear-gradient(to bottom, rgba(10, 10, 15, 0.95), transparent);
+  padding: 0 2.5rem;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  background: rgba(8, 7, 9, 0.72);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.08);
   z-index: var(--z-nav);
 }
 
 .logo {
-  font-size: var(--font-size-xl);
+  font-size: 1.15rem;
   font-weight: 900;
-  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   text-decoration: none;
-  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .searchForm {
@@ -25,21 +32,23 @@
 }
 
 .searchInput {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
   color: var(--text-primary);
+  font-family: var(--font-sans);
   font-size: var(--font-size-sm);
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.875rem;
   width: 220px;
   outline: none;
-  transition: border-color var(--transition-card);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .searchInput:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 .searchInput::placeholder {
-  color: var(--text-muted);
+  color: var(--text-dim);
 }

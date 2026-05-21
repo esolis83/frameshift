@@ -14,6 +14,7 @@ dist-ssr
 
 CLAUDE.md
 WORKFLOW.md
+scripts/README.md
 
 # Editor directories and files
 .vscode/*

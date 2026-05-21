@@ -8,15 +8,15 @@ interface MovieCardProps {
   movie: Movie;
 }
 
-// Scale lives on the inner wrapper so it never conflicts with the layoutId exit animation.
+// Scale on inner wrapper — never conflicts with layoutId exit animation
 const scaleVariants = {
-  rest: { scale: 1 },
-  hover: { scale: 1.08, transition: { duration: 0.3, ease: 'easeOut' as const } },
+  rest:  { scale: 1 },
+  hover: { scale: 1.04, transition: { duration: 0.3, ease: 'easeOut' as const } },
 };
 
 const overlayVariants = {
-  rest: { opacity: 0 },
-  hover: { opacity: 1, transition: { duration: 0.2 } },
+  rest:  { opacity: 0, y: 6 },
+  hover: { opacity: 1, y: 0, transition: { duration: 0.22 } },
 };
 
 export function MovieCard({ movie }: MovieCardProps) {
@@ -24,7 +24,6 @@ export function MovieCard({ movie }: MovieCardProps) {
   const { videoRef, onMouseEnter, onMouseLeave } = useHoverVideo(movie.previewClipUrl);
 
   return (
-    // layoutId anchor — position/size only, no transforms
     <motion.div
       className={styles.card}
       layoutId={`card-${movie.id}`}
@@ -33,7 +32,6 @@ export function MovieCard({ movie }: MovieCardProps) {
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && openModal(movie)}
     >
-      {/* inner wrapper owns hover scale + overlay variants */}
       <motion.div
         className={styles.inner}
         initial="rest"
@@ -43,10 +41,11 @@ export function MovieCard({ movie }: MovieCardProps) {
         onMouseLeave={onMouseLeave}
         variants={scaleVariants}
       >
+        {/* Widescreen backdrop image */}
         <img
-          src={movie.posterUrl}
+          src={movie.backdropUrl || movie.posterUrl}
           alt={movie.title}
-          className={styles.poster}
+          className={styles.backdrop}
           loading="lazy"
         />
         {movie.previewClipUrl && (
@@ -62,7 +61,11 @@ export function MovieCard({ movie }: MovieCardProps) {
         <motion.div className={styles.overlay} variants={overlayVariants}>
           <p className={styles.title}>{movie.title}</p>
           <p className={styles.meta}>
-            {movie.genre[0]} · {movie.year} · ★ {movie.rating.toFixed(1)}
+            <span className={styles.rating}>★ {movie.rating.toFixed(1)}</span>
+            <span className={styles.dot}>·</span>
+            <span>{movie.genre[0]}</span>
+            <span className={styles.dot}>·</span>
+            <span>{movie.year}</span>
           </p>
         </motion.div>
       </motion.div>
