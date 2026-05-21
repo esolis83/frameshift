@@ -1,6 +1,8 @@
 # Frameshift
 
-A Netflix/Prime Video-style portfolio project built with a headless WordPress CMS and a React TypeScript frontend.
+[![Deploy to Hostinger](https://github.com/esolis83/frameshift/actions/workflows/deploy.yml/badge.svg)](https://github.com/esolis83/frameshift/actions/workflows/deploy.yml)
+
+A headless WordPress + React TypeScript streaming-service portfolio project.
 
 **Live site:** [frameshift.enriquesolis.me](https://frameshift.enriquesolis.me)
 
@@ -24,20 +26,23 @@ Frameshift is a full-stack portfolio piece that demonstrates headless CMS archit
 | Animation | Framer Motion |
 | Styling | CSS Modules + CSS custom properties |
 | CMS hosting | Hostinger (`frameshiftcms.enriquesolis.me`) |
-| Frontend hosting | Netlify (`frameshift.enriquesolis.me`) |
+| Frontend hosting | Hostinger (`frameshift.enriquesolis.me`) |
+| CI/CD | GitHub Actions → FTP deploy |
 
 ---
 
 ## Features
 
-- **Hero section** — featured movie banner with backdrop image and entrance animation
-- **Genre rows** — horizontally scrollable rows grouped by genre with fade-in arrow controls
-- **Movie cards** — hover scale animation with muted 5-second preview clip autoplay after 800ms
+- **Intro animation** — typewriter types FRAME then SHIFT, words slide together, logo flies to NavBar
+- **Hero section** — featured movie banner with frosted glass panel and entrance animation
+- **Genre rows** — horizontally scrollable rows with staggered card entrance animations
+- **Movie cards** — widescreen 16:9, hover glow, Top Rated badge on high-rated titles
 - **Detail modal** — card morphs into a full detail overlay using Framer Motion `layoutId`
-- **Search** — filter movies by title at `/search?q=`
-- **Movie detail page** — full page view at `/movie/:slug`
+- **Search** — filter movies by title or genre at `/search?q=`
+- **Movie detail page** — full page at `/movie/:slug` with cast and trailer embed
 - **Page transitions** — `AnimatePresence` wrapping routes for smooth fades
-- **Headless CMS** — all movie content managed in WordPress, zero frontend rebuild needed to add content
+- **Headless CMS** — all movie content managed in WordPress, zero frontend rebuild needed
+- **Mobile responsive** — glassmorphism adapts across all screen sizes
 
 ---
 
@@ -77,4 +82,4 @@ npm run dev
 
 ## Deployment
 
-Netlify is connected to the `main` branch on GitHub. Every push to `main` automatically builds and deploys to `frameshift.enriquesolis.me`.
+GitHub Actions builds on every push to `main` and deploys to Hostinger via FTP automatically.

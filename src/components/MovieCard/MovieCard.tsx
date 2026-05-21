@@ -32,6 +32,9 @@ export function MovieCard({ movie }: MovieCardProps) {
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && openModal(movie)}
     >
+      {movie.rating >= 8.8 && (
+        <div className={styles.badge}>★ Top Rated</div>
+      )}
       <motion.div
         className={styles.inner}
         initial="rest"
