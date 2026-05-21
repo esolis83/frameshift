@@ -38,6 +38,11 @@ export default function Browse() {
     return acc;
   }, {});
 
+  // On first visit the intro plays for ~5.5s — delay stagger until it's done.
+  // On return visits (intro already seen) use a short delay.
+  const introPlaying = !sessionStorage.getItem('fs-intro-seen');
+  const staggerDelay = introPlaying ? 5.8 : 0.3;
+
   return (
     <motion.main
       initial={{ opacity: 0 }}
@@ -51,7 +56,7 @@ export default function Browse() {
         style={{ padding: '2rem 0' }}
         variants={{
           hidden: {},
-          show: { transition: { staggerChildren: 0.14, delayChildren: 0.35 } },
+          show: { transition: { staggerChildren: 0.14, delayChildren: staggerDelay } },
         }}
         initial="hidden"
         animate="show"
